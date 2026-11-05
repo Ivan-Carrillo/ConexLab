@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Componentes conexas · Descúbrelas paso a paso</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#fbf8f1; --ink:#1f3a5f; --mint:#7fd1b9; --sun:#ffb547; --coral:#ef6f5e;
+  --card:#ffffff; --line:#e4e0d4; --muted:#66768a; --soft:#f1f6f4;
+}
+*{box-sizing:border-box}
+body{
+  font-family:'Nunito',system-ui,-apple-system,'Segoe UI',sans-serif;
+  background:var(--paper);color:var(--ink);margin:0;line-height:1.55;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:28px 28px;background-attachment:fixed;
+}
+.wrap{max-width:980px;margin:0 auto;padding:28px 16px 48px}
+header{margin-bottom:22px}
+h1{font-size:clamp(1.6rem,4vw,2.2rem);font-weight:800;margin:0 0 6px;letter-spacing:-.01em}
+header p{margin:0;color:var(--muted);font-size:1.05rem;max-width:60ch}
+.card{background:var(--card);border-radius:18px;padding:20px;margin-bottom:18px;border:2px solid var(--ink)}
+.step{display:flex;gap:12px;align-items:center;margin:0 0 10px}
+.badge{flex:none;width:36px;height:36px;border-radius:50%;background:var(--sun);display:grid;place-items:center;font-weight:800}
+.step h2{font-size:1.2rem;margin:0}
+.hint{color:var(--muted);margin:4px 0 14px;font-size:.97rem}
+.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;border:2px solid var(--ink);background:#fff;cursor:pointer;font-weight:600}
+.pill input{accent-color:var(--ink);margin:0}
+.pill:has(input:checked){background:var(--mint)}
+input[type=range]{accent-color:var(--coral);width:min(260px,70vw)}
+#nOut{display:inline-block;min-width:2ch;font-weight:800;font-size:1.3rem;text-align:center}
+button{font:inherit;font-weight:800;background:var(--ink);color:#fff;border:0;border-radius:999px;padding:11px 20px;cursor:pointer;transition:background .15s,transform .05s}
+button:hover:not(:disabled){background:var(--coral)}
+button:active:not(:disabled){transform:translateY(1px)}
+button.alt{background:#fff;color:var(--ink);border:2px solid var(--ink)}
+button.alt:hover:not(:disabled){background:var(--sun);color:var(--ink)}
+button:disabled{background:#c9cfd6;color:#fff;cursor:not-allowed}
+button:focus-visible,input:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+.msg{min-height:1.5em;margin:10px 0 0;font-weight:600}
+.msg.ok{color:#1d7a5f}.msg.warn{color:#b3431f}
+.tip{background:var(--soft);border-radius:12px;padding:12px 14px;margin-top:14px;font-size:.97rem}
+table{border-collapse:separate;border-spacing:3px;font-size:.92rem;margin-top:6px}
+td,th{width:34px;height:34px;text-align:center;border-radius:8px}
+th{color:var(--muted);font-weight:600}
+td{background:#f4f2ec}
+td.on{background:var(--ink);color:#fff;font-weight:800}
+td.hl{color:#fff;font-weight:800}
+.grid td{background:transparent;padding:0}
+.grid input.cell{width:30px;height:30px;accent-color:var(--ink);cursor:pointer}
+.scroll{overflow-x:auto;padding-bottom:4px}
+.dual{display:grid;grid-template-columns:1fr;gap:18px}
+@media(min-width:760px){.dual{grid-template-columns:1fr 1fr}}
+canvas.graph{width:100%;height:auto;display:block;background:#fff;border-radius:14px;border:2px dashed var(--line)}
+.controls{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0}
+.log{font-size:1.05rem;background:var(--soft);border-radius:14px;padding:14px;min-height:3.2em;margin-top:8px}
+.summary{margin-top:14px;font-weight:800;font-size:1.1rem}
+.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.tag{display:inline-block;padding:4px 12px;border-radius:999px;color:#fff;font-weight:800;font-size:.9rem}
+#sub{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:14px}
+#sub .box{background:#fff;border:2px solid var(--line);border-radius:14px;padding:10px;text-align:center}
+#sub canvas{width:100%;height:auto}
+.hidden{display:none}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <h1>Componentes conexas 🧩</h1>
+  <p>Descubre qué vértices del grafo pueden llegar unos a otros. Te guiamos paso a paso, sin prisa.</p>
+</header>
+
+<section class="card" aria-labelledby="s1">
+  <div class="step"><span class="badge">1</span><h2 id="s1">Crea tu grafo</h2></div>
+  <p class="hint">Elige cuántos vértices quieres (entre 5 y 15) y cómo quieres armarlo.</p>
+  <div class="row">
+    <label>Vértices: <span id="nOut">7</span></label>
+    <input type="range" id="n" min="5" max="15" value="7" aria-label="Número de vértices">
+  </div>
+  <div class="row" style="margin-top:12px">
+    <label class="pill"><input type="radio" name="modo" value="auto" checked> 🎲 Al azar</label>
+    <label class="pill"><input type="radio" name="modo" value="manual"> ✏️ A mano</label>
+  </div>
+  <div class="row" style="margin-top:14px">
+    <button id="btnPrep">Crear grafo</button>
+  </div>
+  <p id="msg1" class="msg" role="status"></p>
+  <div id="matrixInput" class="scroll"></div>
+</section>
+
+<section class="card" aria-labelledby="s2">
+  <div class="step"><span class="badge">2</span><h2 id="s2">Calcula las componentes</h2></div>
+  <p class="hint">Calcularemos qué vértices llegan entre sí, pasando por otros si hace falta.</p>
+  <button id="btnCalc" disabled>Calcular componentes</button>
+</section>
+
+<section id="results" class="hidden" aria-labelledby="s3">
+  <div class="card">
+    <div class="step"><span class="badge">3</span><h2 id="s3">Mira cómo se agrupan</h2></div>
+    <div class="dual">
+      <div>
+        <strong>Así se ve tu grafo</strong>
+        <canvas id="cv" class="graph" width="520" height="420" aria-label="Grafo asociado"></canvas>
+      </div>
+      <div>
+        <strong>Paso 1 · Matriz de adyacencia</strong>
+        <p class="hint">Añadimos 1 en la diagonal para contar también cada vértice consigo mismo.</p>
+        <div class="scroll" id="m1"></div>
+        <strong>Paso 2 · Matriz de caminos</strong>
+        <p class="hint">Un 1 significa que puedes llegar de un vértice a otro, aunque sea dando rodeos.</p>
+        <div class="scroll" id="m2"></div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button id="btnNext">Siguiente paso</button>
+      <button class="alt" id="btnAll">Mostrar todo</button>
+      <button class="alt" id="btnReset">Empezar de nuevo</button>
+    </div>
+    <div class="log" id="log" aria-live="polite"></div>
+    <div class="scroll" id="ord"></div>
+    <div id="sub"></div>
+    <div id="summary" class="summary"></div>
+  </div>
+</section>
+</div>
+
+<script>
+const PAL=['#e53935','#1e88e5','#43a047','#fb8c00','#8e24aa','#00897b','#6d4c41','#3949ab','#c0a000','#d81b60','#00acc1','#7cb342','#5e35b1','#f4511e','#757575'];
+const $=id=>document.getElementById(id);
+let mode='auto', n=7, A=[], A1=[], P=[], steps=[], k=0;
+
+function zeros(m){return Array.from({length:m},()=>Array(m).fill(0));}
+function randMatrix(m){
+  const M=zeros(m);
+  for(let i=0;i<m;i++)for(let j=i+1;j<m;j++){
+    if(Math.random()<0.2){M[i][j]=1;M[j][i]=1;}
+  }
+  return M;
+}
+function mulBool(X,Y){
+  const m=X.length,Z=zeros(m);
+  for(let i=0;i<m;i++)for(let j=0;j<m;j++){
+    let s=0;for(let t=0;t<m;t++){if(X[i][t]&&Y[t][j]){s=1;break;}}
+    Z[i][j]=s;
+  }
+  return Z;
+}
+function pathMatrix(M){
+  const m=M.length;
+  let R=M.map(r=>r.slice()),Pk=M;
+  for(let t=2;t<=m-1;t++){
+    Pk=mulBool(Pk,M);
+    R=R.map((r,i)=>r.map((v,j)=>v|Pk[i][j]));
+  }
+  return R;
+}
+function buildSteps(M){
+  const m=M.length,vis=Array(m).fill(false),out=[];
+  for(let i=0;i<m;i++){
+    if(vis[i])continue;
+    const comp=[];
+    for(let j=0;j<m;j++)if(M[i][j]&&!vis[j])comp.push(j);
+    comp.forEach(j=>vis[j]=true);
+    out.push({i,comp});
+  }
+  return out;
+}
+function colorsUpTo(t){
+  const c=Array(A.length).fill(null);
+  steps.slice(0,t).forEach((s,idx)=>s.comp.forEach(v=>c[v]=PAL[idx%PAL.length]));
+  return c;
+}
+function table(M,colors,labels){
+  const m=M.length,lab=labels||M.map((_,i)=>i+1);
+  let h='<table><tr><th></th>'+lab.map(x=>`<th>${x}</th>`).join('')+'</tr>';
+  for(let i=0;i<m;i++){
+    h+=`<tr><th>${lab[i]}</th>`;
+    for(let j=0;j<m;j++){
+      const c=(colors&&colors[i]&&colors[i]===colors[j])?colors[i]:'';
+      const cls=c?'hl':(M[i][j]?'on':'');
+      h+=`<td class="${cls}" style="${c?'background:'+c:''}">${M[i][j]}</td>`;
+    }
+    h+='</tr>';
+  }
+  return h+'</table>';
+}
+function say(id,text,type){
+  const el=$(id);el.textContent=text;el.className='msg '+(type||'');
+}
+function buildManual(m){
+  let h='<table class="grid"><tr><th></th>'+[...Array(m)].map((_,j)=>`<th>${j+1}</th>`).join('')+'</tr>';
+  for(let i=0;i<m;i++){
+    h+=`<tr><th>${i+1}</th>`;
+    for(let j=0;j<m;j++){
+      h+=i===j?'<td>·</td>':`<td><input class="cell" type="checkbox" aria-label="Conexión ${i+1}-${j+1}" data-i="${i}" data-j="${j}" ${A[i][j]?'checked':''}></td>`;
+    }
+    h+='</tr>';
+  }
+  return h+'</table><p class="hint">Marca las conexiones que existan. Si marcas una, la casilla opuesta se marca sola.</p>';
+}
+function syncA(){
+  if(mode!=='manual')return;
+  const M=zeros(A.length);
+  document.querySelectorAll('input.cell').forEach(c=>{M[+c.dataset.i][+c.dataset.j]=c.checked?1:0;});
+  A=M;
+}
+document.addEventListener('change',e=>{
+  const t=e.target;
+  if(t.matches&&t.matches('input.cell')){
+    const m=document.querySelector(`input.cell[data-i="${t.dataset.j}"][data-j="${t.dataset.i}"]`);
+    if(m)m.checked=t.checked;
+    syncA();drawGraph();
+  }
+});
+$('n').oninput=e=>$('nOut').textContent=e.target.value;
+
+function drawGraph(){
+  const c=$('cv'),g=c.getContext('2d');
+  g.clearRect(0,0,c.width,c.height);
+  const N=A.length,colors=colorsUpTo(k),pts=[];
+  for(let i=0;i<N;i++){
+    const a=-Math.PI/2+2*Math.PI*i/N;
+    pts.push([260+170*Math.cos(a),210+170*Math.sin(a)]);
+  }
+  for(let i=0;i<N;i++)for(let j=i+1;j<N;j++){
+    if(!A[i][j])continue;
+    const same=colors[i]&&colors[i]===colors[j];
+    g.strokeStyle=same?colors[i]:'#d3d0c6';
+    g.lineWidth=same?4:2;
+    g.beginPath();g.moveTo(...pts[i]);g.lineTo(...pts[j]);g.stroke();
+  }
+  for(let i=0;i<N;i++){
+    g.beginPath();g.arc(pts[i][0],pts[i][1],19,0,2*Math.PI);
+    g.fillStyle=colors[i]||'#ece9df';g.fill();
+    g.lineWidth=2;g.strokeStyle='#1f3a5f';g.stroke();
+    g.fillStyle=colors[i]?'#fff':'#1f3a5f';
+    g.font='800 15px Nunito, Arial';g.textAlign='center';g.textBaseline='middle';
+    g.fillText(i+1,pts[i][0],pts[i][1]);
+  }
+}
+function drawSub(comp,color,idx){
+  const box=document.createElement('div');box.className='box';
+  box.innerHTML=`<span class="tag" style="background:${color}">Grupo ${idx+1}</span><div class="hint" style="margin:6px 0 0">Vértices ${comp.map(v=>v+1).join(', ')}</div>`;
+  const c=document.createElement('canvas');c.width=240;c.height=200;
+  box.appendChild(c);$('sub').appendChild(box);
+  const g=c.getContext('2d'),m=comp.length;
+  const R=m>1?Math.min(70,30+m*12):0;
+  const pts=comp.map((_,t)=>{const a=-Math.PI/2+2*Math.PI*t/m;return [120+R*Math.cos(a),100+R*Math.sin(a)];});
+  for(let t=0;t<m;t++)for(let u=t+1;u<m;u++){
+    if(A[comp[t]][comp[u]]){g.strokeStyle=color;g.lineWidth=4;g.beginPath();g.moveTo(...pts[t]);g.lineTo(...pts[u]);g.stroke();}
+  }
+  comp.forEach((v,t)=>{
+    g.beginPath();g.arc(pts[t][0],pts[t][1],17,0,2*Math.PI);g.fillStyle=color;g.fill();
+    g.fillStyle='#fff';g.font='800 14px Nunito, Arial';g.textAlign='center';g.textBaseline='middle';
+    g.fillText(v+1,pts[t][0],pts[t][1]);
+  });
+}
+function refresh(){
+  drawGraph();
+  $('m2').innerHTML=table(P,colorsUpTo(k));
+}
+function next(){
+  if(k>=steps.length)return;
+  const s=steps[k];k++;
+  const names=s.comp.map(v=>v+1).join(', ');
+  $('log').innerHTML=`<b>Paso ${k}:</b> miramos el vértice ${s.i+1}. Desde él se puede llegar a {${names}}, así que forman el <b>grupo ${k}</b>.`;
+  refresh();
+  if(k===steps.length)finish();
+}
+function finish(){
+  $('btnNext').disabled=true;$('btnAll').disabled=true;
+  const order=steps.flatMap(s=>s.comp);
+  const colors=colorsUpTo(steps.length);
+  const Q=order.map(i=>order.map(j=>P[i][j]));
+  $('ord').innerHTML='<p class="hint"><b>Matriz reordenada:</b> cada grupo queda como un bloque de unos sobre la diagonal.</p>'
+    +table(Q,order.map(v=>colors[v]),order.map(v=>v+1));
+  $('sub').innerHTML='';
+  steps.forEach((s,idx)=>drawSub(s.comp,PAL[idx%PAL.length],idx));
+  const word=steps.length===1?'un grupo':steps.length+' grupos';
+  $('summary').textContent=`¡Listo! Tu grafo tiene ${word} conexos.`;
+  $('log').innerHTML+=` Las componentes son ${steps.map((s,i)=>`V${i+1} = {${s.comp.map(v=>v+1).join(', ')}}`).join(' · ')}.`;
+}
+
+$('btnPrep').onclick=()=>{
+  n=parseInt($('n').value,10);
+  mode=document.querySelector('input[name=modo]:checked').value;
+  A=mode==='auto'?randMatrix(n):zeros(n);
+  steps=[];k=0;P=[];
+  $('matrixInput').innerHTML=mode==='auto'
+    ?'<p class="hint"><b>Así quedó tu grafo al azar.</b> Puedes calcular o crear otro.</p>'+table(A)
+    :buildManual(n);
+  say('msg1',mode==='auto'?'¡Listo! Creamos un grafo al azar. Ahora calcula las componentes.':'Marca las conexiones que tenga tu grafo y luego calcula.','ok');
+  $('btnCalc').disabled=false;
+  $('results').classList.add('hidden');
+  drawGraph();
+};
+$('btnCalc').onclick=()=>{
+  syncA();
+  A1=A.map((r,i)=>r.map((v,j)=>i===j?1:v));
+  P=pathMatrix(A1);
+  steps=buildSteps(P);k=0;
+  $('results').classList.remove('hidden');
+  $('m1').innerHTML=table(A1);
+  $('m2').innerHTML=table(P);
+  $('ord').innerHTML='';$('sub').innerHTML='';$('summary').textContent='';
+  $('log').innerHTML='Presiona <b>Siguiente paso</b> para ver cómo se forma cada grupo.';
+  $('btnNext').disabled=false;$('btnAll').disabled=false;
+  drawGraph();
+  $('results').scrollIntoView({behavior:'smooth',block:'start'});
+};
+$('btnNext').onclick=next;
+$('btnAll').onclick=()=>{while(k<steps.length)next();};
+$('btnReset').onclick=()=>{
+  $('results').classList.add('hidden');
+  say('msg1','');
+  $('matrixInput').innerHTML='';
+  $('btnCalc').disabled=true;
+  A=[];steps=[];k=0;
+  window.scrollTo({top:0,behavior:'smooth'});
+};
+drawGraph();
+</script>
+</body>
+</html>
