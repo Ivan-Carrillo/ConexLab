@@ -1,25 +1,56 @@
 # ConexLab
 
-# Componentes conexas 🧩
+**ConexLab** es una aplicación web interactiva y didáctica diseñada para la visualización, exploración y cálculo paso a paso de **componentes conexas** y **matrices de caminos** en grafos no dirigidos. 
 
-Una página web sencilla para descubrir qué vértices de un grafo no dirigido pueden llegar unos a otros. Puedes crear un grafo al azar o marcarlo a mano, y luego ver paso a paso cómo se forman las componentes conexas.
+🔗 **Demostración en vivo:** [https://ivan-carrillo.github.io/ConexLab/](https://ivan-carrillo.github.io/ConexLab/)
 
-## ¿Qué puedes hacer?
+---
 
-1. **Elegir el número de vértices** (entre 5 y 15).
-2. **Crear el grafo**, al azar o a mano.
-3. **Calcular las componentes** y seguir el proceso con el botón *Siguiente paso*, o ver todo de una vez con *Mostrar todo*.
+## Características Principales
 
-La página muestra el grafo, la matriz de adyacencia (con 1 en la diagonal), la matriz de caminos, la matriz reordenada por grupos y la gráfica de cada componente.
+* **Generación Flexible de Grafos:** 
+  * Modo **Al azar** con densidad controlada.
+  * Modo **A mano** mediante simulación de matriz de adyacencia simétrica.
+  * Ajuste de vértices dinámico ($5 \le |V| \le 15$).
+* **Modelado Matemático e Interactivo:**
+  * Cálculo dinámico de la **Matriz de Adyacencia ($A_1$)** con reflexividad en la diagonal.
+  * Algoritmo de multiplicación booleana para la **Matriz de Caminos ($P$)**.
+  * Reordenamiento matricial por bloques conexos.
+* **Visualización de Grafos y Subgrafos:**
+  * Dibujo vectorial interactivo en `<canvas>` HTML5.
+  * Resaltado progresivo por colores para cada grupo conexo identificado.
+  * Generación de subgrafos independientes por cada componente encontrada.
+* **Enfoque Didáctico:**
+  * Registro explicativo paso a paso (*Log*) para reforzar el aprendizaje de algoritmos sobre grafos.
 
-## Cómo usarla
+---
 
-No necesitas instalar nada. Basta con abrir el archivo `index.html` en cualquier navegador moderno.
+## Tecnologías Utilizadas
 
-## Tecnologías
+* **HTML5:** Estructuración semántica de la interfaz y elementos Canvas.
+* **CSS3 :** Diseño moderno estilo *Clean Academic Palette*, totalmente adaptativo (*responsive*).
+* **JavaScript Vainilla:** Algoritmos de teoría de grafos, manipulaciones matriciales y renderizado 2D en tiempo real.
+* **Google Fonts:** Tipografía *Nunito* para una legibilidad clara e instructiva.
 
-HTML, CSS y JavaScript puro, sin librerías externas. Solo usa la tipografía Nunito de Google Fonts.
+---
 
-## Licencia y uso académico
+## Modo de Uso
 
-Este proyecto fue desarrollado por estudiantes universitarios como trabajo del curso Matemática Computacional, en la Universidad Peruana de Ciencias Aplicadas. Su uso está limitado a **fines académicos**: estudio, enseñanza y evaluación.
+1. **Paso 1 · Configurar el Grafo:**
+   * Selecciona el número deseado de vértices mediante el deslizador.
+   * Elige entre generar una topología aleatoria o marcar las aristas manualmente en la matriz.
+   * Haz clic en **Crear grafo**.
+2. **Paso 2 · Iniciar Análisis:**
+   * Presiona el botón **Calcular componentes**.
+3. **Paso 3 · Explorar Resultados:**
+   * Utiliza el botón **Siguiente paso** para observar de forma secuencial la identificación de cada grupo conexo.
+   * Alternativamente, haz clic en **Mostrar todo** para desplegar de forma inmediata las matrices de adyacencia, caminos, bloques reordenados y la desintegración en subgrafos.
+
+---
+
+## Licencia y Créditos Académicos
+
+Este proyecto fue desarrollado como trabajo del curso de **Matemática Computacional** en la **Universidad Peruana de Ciencias Aplicadas (UPCA / UPC)**.
+
+* **Uso:** Estrictamente limitado a **fines académicos**, docentes y de investigación.
+* **Autor:** Iván Carrillo & Equipo de Trabajo.
