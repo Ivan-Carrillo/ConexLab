@@ -3,135 +3,121 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Componentes conexas · Descúbrelas paso a paso</title>
+<title>Componentes conexas</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --paper:#fbf8f1; --ink:#1f3a5f; --mint:#7fd1b9; --sun:#ffb547; --coral:#ef6f5e;
-  --card:#ffffff; --line:#e4e0d4; --muted:#66768a; --soft:#f1f6f4;
+  --bg:#e4e6e9; --ink:#1d2024; --sub:#5b616a; --line:#b9bec6; --soft:#d3d7dd;
+  --panel:#eceef1; --accent:#3f7a00; --white:#ffffff;
 }
 *{box-sizing:border-box}
-body{
-  font-family:'Nunito',system-ui,-apple-system,'Segoe UI',sans-serif;
-  background:var(--paper);color:var(--ink);margin:0;line-height:1.55;
-  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
-  background-size:28px 28px;background-attachment:fixed;
-}
-.wrap{max-width:980px;margin:0 auto;padding:28px 16px 48px}
-header{margin-bottom:22px}
-h1{font-size:clamp(1.6rem,4vw,2.2rem);font-weight:800;margin:0 0 6px;letter-spacing:-.01em}
-header p{margin:0;color:var(--muted);font-size:1.05rem;max-width:60ch}
-.card{background:var(--card);border-radius:18px;padding:20px;margin-bottom:18px;border:2px solid var(--ink)}
-.step{display:flex;gap:12px;align-items:center;margin:0 0 10px}
-.badge{flex:none;width:36px;height:36px;border-radius:50%;background:var(--sun);display:grid;place-items:center;font-weight:800}
-.step h2{font-size:1.2rem;margin:0}
-.hint{color:var(--muted);margin:4px 0 14px;font-size:.97rem}
-.row{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
-.pill{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;border:2px solid var(--ink);background:#fff;cursor:pointer;font-weight:600}
-.pill input{accent-color:var(--ink);margin:0}
-.pill:has(input:checked){background:var(--mint)}
-input[type=range]{accent-color:var(--coral);width:min(260px,70vw)}
-#nOut{display:inline-block;min-width:2ch;font-weight:800;font-size:1.3rem;text-align:center}
-button{font:inherit;font-weight:800;background:var(--ink);color:#fff;border:0;border-radius:999px;padding:11px 20px;cursor:pointer;transition:background .15s,transform .05s}
-button:hover:not(:disabled){background:var(--coral)}
-button:active:not(:disabled){transform:translateY(1px)}
-button.alt{background:#fff;color:var(--ink);border:2px solid var(--ink)}
-button.alt:hover:not(:disabled){background:var(--sun);color:var(--ink)}
-button:disabled{background:#c9cfd6;color:#fff;cursor:not-allowed}
-button:focus-visible,input:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
-.msg{min-height:1.5em;margin:10px 0 0;font-weight:600}
-.msg.ok{color:#1d7a5f}.msg.warn{color:#b3431f}
-.tip{background:var(--soft);border-radius:12px;padding:12px 14px;margin-top:14px;font-size:.97rem}
-table{border-collapse:separate;border-spacing:3px;font-size:.92rem;margin-top:6px}
-td,th{width:34px;height:34px;text-align:center;border-radius:8px}
-th{color:var(--muted);font-weight:600}
-td{background:#f4f2ec}
-td.on{background:var(--ink);color:#fff;font-weight:800}
-td.hl{color:#fff;font-weight:800}
-.grid td{background:transparent;padding:0}
-.grid input.cell{width:30px;height:30px;accent-color:var(--ink);cursor:pointer}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;line-height:1.55;font-size:16px}
+.page{max-width:920px;margin:0 auto;padding:clamp(24px,6vw,64px) clamp(18px,4vw,32px) 64px}
+h1{font-size:clamp(1.9rem,4.5vw,2.6rem);font-weight:700;letter-spacing:-.02em;margin:0}
+.lead{color:var(--sub);margin:8px 0 40px;font-size:1.05rem}
+.step{border-top:1px solid var(--line);padding:24px 0 28px}
+.step h2{font-size:1.05rem;font-weight:600;margin:0 0 4px}
+.hint{color:var(--sub);margin:0 0 16px;font-size:.95rem}
+.row{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+.count{font-weight:600;min-width:2ch;text-align:center;font-variant-numeric:tabular-nums}
+input[type=range]{accent-color:var(--accent);width:min(280px,70vw)}
+.mode{background:var(--white);color:var(--ink);border-color:var(--line)}
+.mode[aria-pressed="true"]{background:var(--ink);color:var(--white);border-color:var(--ink)}
+button{font:inherit;font-size:.95rem;font-weight:600;border-radius:10px;padding:10px 18px;cursor:pointer;border:1px solid var(--ink);background:var(--ink);color:var(--white);transition:background .15s,color .15s,border-color .15s}
+button.ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+button:hover:not(:disabled){background:var(--accent);border-color:var(--accent);color:var(--white)}
+button.ghost:hover:not(:disabled){background:var(--panel);color:var(--ink);border-color:var(--sub)}
+button:disabled{opacity:.4;cursor:not-allowed}
+button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.msg{min-height:1.5em;margin:14px 0 0;font-size:.95rem;color:var(--accent)}
 .scroll{overflow-x:auto;padding-bottom:4px}
-.dual{display:grid;grid-template-columns:1fr;gap:18px}
-@media(min-width:760px){.dual{grid-template-columns:1fr 1fr}}
-canvas.graph{width:100%;height:auto;display:block;background:#fff;border-radius:14px;border:2px dashed var(--line)}
-.controls{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0}
-.log{font-size:1.05rem;background:var(--soft);border-radius:14px;padding:14px;min-height:3.2em;margin-top:8px}
-.summary{margin-top:14px;font-weight:800;font-size:1.1rem}
-.tags{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
-.tag{display:inline-block;padding:4px 12px;border-radius:999px;color:#fff;font-weight:800;font-size:.9rem}
-#sub{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:14px}
-#sub .box{background:#fff;border:2px solid var(--line);border-radius:14px;padding:10px;text-align:center}
+table{border-collapse:separate;border-spacing:3px;margin-top:6px;font-size:.9rem;font-variant-numeric:tabular-nums}
+td,th{width:32px;height:32px;text-align:center;border-radius:6px}
+th{color:var(--sub);font-weight:500}
+td{background:var(--panel);color:var(--sub)}
+td.on{background:var(--ink);color:var(--white);font-weight:600}
+td.hl{color:var(--white);font-weight:600}
+.grid td{background:none;padding:0}
+.grid input.cell{-webkit-appearance:none;appearance:none;width:28px;height:28px;margin:0;border:1px solid var(--line);border-radius:6px;background:var(--white);cursor:pointer}
+.grid input.cell:checked{background:var(--ink);border-color:var(--ink)}
+.grid input.cell:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.results{margin-top:8px}
+.dual{display:grid;grid-template-columns:1fr;gap:32px}
+@media(min-width:780px){.dual{grid-template-columns:1.1fr .9fr}}
+h3{font-size:.95rem;font-weight:600;margin:20px 0 4px}
+canvas.graph{width:100%;height:auto;display:block;background:var(--white);border:1px solid var(--soft);border-radius:12px}
+.controls{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0 8px}
+.log{color:var(--sub);font-size:.98rem;min-height:2.6em;margin-top:6px}
+.log strong{color:var(--ink);font-weight:600}
+.summary{font-size:1.15rem;font-weight:600;color:var(--accent);margin:18px 0 0}
+#sub{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-top:16px}
+#sub .box{background:var(--white);border:1px solid var(--soft);border-radius:12px;padding:12px;text-align:center}
 #sub canvas{width:100%;height:auto}
+.tag{display:inline-block;font-size:.85rem;font-weight:600;color:var(--white);padding:3px 10px;border-radius:999px}
 .hidden{display:none}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
-<div class="wrap">
-<header>
-  <h1>Componentes conexas 🧩</h1>
-  <p>Descubre qué vértices del grafo pueden llegar unos a otros. Te guiamos paso a paso, sin prisa.</p>
-</header>
+<main class="page">
+  <h1>Componentes conexas</h1>
+  <p class="lead">Encuentra los grupos de vértices que pueden alcanzarse entre sí.</p>
 
-<section class="card" aria-labelledby="s1">
-  <div class="step"><span class="badge">1</span><h2 id="s1">Crea tu grafo</h2></div>
-  <p class="hint">Elige cuántos vértices quieres (entre 5 y 15) y cómo quieres armarlo.</p>
-  <div class="row">
-    <label>Vértices: <span id="nOut">7</span></label>
-    <input type="range" id="n" min="5" max="15" value="7" aria-label="Número de vértices">
-  </div>
-  <div class="row" style="margin-top:12px">
-    <label class="pill"><input type="radio" name="modo" value="auto" checked> 🎲 Al azar</label>
-    <label class="pill"><input type="radio" name="modo" value="manual"> ✏️ A mano</label>
-  </div>
-  <div class="row" style="margin-top:14px">
-    <button id="btnPrep">Crear grafo</button>
-  </div>
-  <p id="msg1" class="msg" role="status"></p>
-  <div id="matrixInput" class="scroll"></div>
-</section>
+  <section class="step" aria-labelledby="s1">
+    <h2 id="s1">1. Arma tu grafo</h2>
+    <p class="hint">Elige entre 5 y 15 vértices y decide cómo quieres armarlo.</p>
+    <div class="row">
+      <span>Vértices</span>
+      <span class="count" id="nOut">7</span>
+      <input type="range" id="n" min="5" max="15" value="7" aria-label="Número de vértices">
+    </div>
+    <div class="row" style="margin-top:16px">
+      <button class="mode" id="modeAuto" aria-pressed="true">Al azar</button>
+      <button class="mode" id="modeManual" aria-pressed="false">A mano</button>
+    </div>
+    <p id="msg1" class="msg" role="status"></p>
+    <div id="matrixInput" class="scroll"></div>
+  </section>
 
-<section class="card" aria-labelledby="s2">
-  <div class="step"><span class="badge">2</span><h2 id="s2">Calcula las componentes</h2></div>
-  <p class="hint">Calcularemos qué vértices llegan entre sí, pasando por otros si hace falta.</p>
-  <button id="btnCalc" disabled>Calcular componentes</button>
-</section>
+  <section class="step" aria-labelledby="s2">
+    <h2 id="s2">2. Calcula los grupos</h2>
+    <p class="hint">Se revisa qué vértices llegan a cuáles, incluso dando rodeos.</p>
+    <button id="btnCalc" disabled>Calcular componentes</button>
+  </section>
 
-<section id="results" class="hidden" aria-labelledby="s3">
-  <div class="card">
-    <div class="step"><span class="badge">3</span><h2 id="s3">Mira cómo se agrupan</h2></div>
-    <div class="dual">
+  <section id="results" class="step hidden" aria-labelledby="s3">
+    <h2 id="s3">3. Mira cómo se agrupan</h2>
+    <div class="results dual">
       <div>
-        <strong>Así se ve tu grafo</strong>
+        <h3>El grafo</h3>
         <canvas id="cv" class="graph" width="520" height="420" aria-label="Grafo asociado"></canvas>
       </div>
       <div>
-        <strong>Paso 1 · Matriz de adyacencia</strong>
-        <p class="hint">Añadimos 1 en la diagonal para contar también cada vértice consigo mismo.</p>
+        <h3>Matriz de adyacencia</h3>
+        <p class="hint">Con 1 en la diagonal, para contar también cada vértice consigo mismo.</p>
         <div class="scroll" id="m1"></div>
-        <strong>Paso 2 · Matriz de caminos</strong>
-        <p class="hint">Un 1 significa que puedes llegar de un vértice a otro, aunque sea dando rodeos.</p>
+        <h3>Matriz de caminos</h3>
+        <p class="hint">Un 1 significa que se puede llegar, aunque sea con rodeos.</p>
         <div class="scroll" id="m2"></div>
       </div>
     </div>
-
     <div class="controls">
       <button id="btnNext">Siguiente paso</button>
-      <button class="alt" id="btnAll">Mostrar todo</button>
-      <button class="alt" id="btnReset">Empezar de nuevo</button>
+      <button class="ghost" id="btnAll">Mostrar todo</button>
+      <button class="ghost" id="btnReset">Empezar de nuevo</button>
     </div>
-    <div class="log" id="log" aria-live="polite"></div>
+    <p class="log" id="log" aria-live="polite"></p>
     <div class="scroll" id="ord"></div>
     <div id="sub"></div>
-    <div id="summary" class="summary"></div>
-  </div>
-</section>
-</div>
+    <p id="summary" class="summary"></p>
+  </section>
+</main>
 
 <script>
-const PAL=['#e53935','#1e88e5','#43a047','#fb8c00','#8e24aa','#00897b','#6d4c41','#3949ab','#c0a000','#d81b60','#00acc1','#7cb342','#5e35b1','#f4511e','#757575'];
+const PAL=['#3f7a00','#1d2024','#2f5d8a','#8a5a00','#6b717a','#4a3f7a','#9aa0a8','#7a2e2e','#2e6b5a','#5a6b2e','#3a4a5a','#8a6f4a','#5b616a','#6e8f3a','#2a2d32'];
+const INK='#1d2024', EDGE='#b9bec6', WHITE='#ffffff', BASE='#eceef1';
 const $=id=>document.getElementById(id);
 let mode='auto', n=7, A=[], A1=[], P=[], steps=[], k=0;
 
@@ -190,9 +176,7 @@ function table(M,colors,labels){
   }
   return h+'</table>';
 }
-function say(id,text,type){
-  const el=$(id);el.textContent=text;el.className='msg '+(type||'');
-}
+function say(id,text){const el=$(id);el.textContent=text;}
 function buildManual(m){
   let h='<table class="grid"><tr><th></th>'+[...Array(m)].map((_,j)=>`<th>${j+1}</th>`).join('')+'</tr>';
   for(let i=0;i<m;i++){
@@ -202,7 +186,7 @@ function buildManual(m){
     }
     h+='</tr>';
   }
-  return h+'</table><p class="hint">Marca las conexiones que existan. Si marcas una, la casilla opuesta se marca sola.</p>';
+  return h+'</table><p class="hint">Marca las conexiones. La casilla opuesta se marca sola.</p>';
 }
 function syncA(){
   if(mode!=='manual')return;
@@ -231,45 +215,42 @@ function drawGraph(){
   for(let i=0;i<N;i++)for(let j=i+1;j<N;j++){
     if(!A[i][j])continue;
     const same=colors[i]&&colors[i]===colors[j];
-    g.strokeStyle=same?colors[i]:'#d3d0c6';
-    g.lineWidth=same?4:2;
+    g.strokeStyle=same?colors[i]:EDGE;
+    g.lineWidth=same?3:2;
     g.beginPath();g.moveTo(...pts[i]);g.lineTo(...pts[j]);g.stroke();
   }
   for(let i=0;i<N;i++){
-    g.beginPath();g.arc(pts[i][0],pts[i][1],19,0,2*Math.PI);
-    g.fillStyle=colors[i]||'#ece9df';g.fill();
-    g.lineWidth=2;g.strokeStyle='#1f3a5f';g.stroke();
-    g.fillStyle=colors[i]?'#fff':'#1f3a5f';
-    g.font='800 15px Nunito, Arial';g.textAlign='center';g.textBaseline='middle';
+    g.beginPath();g.arc(pts[i][0],pts[i][1],18,0,2*Math.PI);
+    g.fillStyle=colors[i]||WHITE;g.fill();
+    g.lineWidth=2;g.strokeStyle=colors[i]||'#9aa0a8';g.stroke();
+    g.fillStyle=colors[i]?WHITE:INK;
+    g.font='600 14px Inter, system-ui, sans-serif';g.textAlign='center';g.textBaseline='middle';
     g.fillText(i+1,pts[i][0],pts[i][1]);
   }
 }
 function drawSub(comp,color,idx){
   const box=document.createElement('div');box.className='box';
-  box.innerHTML=`<span class="tag" style="background:${color}">Grupo ${idx+1}</span><div class="hint" style="margin:6px 0 0">Vértices ${comp.map(v=>v+1).join(', ')}</div>`;
+  box.innerHTML=`<span class="tag" style="background:${color}">Grupo ${idx+1}</span><div class="hint" style="margin:8px 0 0">Vértices ${comp.map(v=>v+1).join(', ')}</div>`;
   const c=document.createElement('canvas');c.width=240;c.height=200;
   box.appendChild(c);$('sub').appendChild(box);
   const g=c.getContext('2d'),m=comp.length;
   const R=m>1?Math.min(70,30+m*12):0;
   const pts=comp.map((_,t)=>{const a=-Math.PI/2+2*Math.PI*t/m;return [120+R*Math.cos(a),100+R*Math.sin(a)];});
   for(let t=0;t<m;t++)for(let u=t+1;u<m;u++){
-    if(A[comp[t]][comp[u]]){g.strokeStyle=color;g.lineWidth=4;g.beginPath();g.moveTo(...pts[t]);g.lineTo(...pts[u]);g.stroke();}
+    if(A[comp[t]][comp[u]]){g.strokeStyle=color;g.lineWidth=3;g.beginPath();g.moveTo(...pts[t]);g.lineTo(...pts[u]);g.stroke();}
   }
   comp.forEach((v,t)=>{
-    g.beginPath();g.arc(pts[t][0],pts[t][1],17,0,2*Math.PI);g.fillStyle=color;g.fill();
-    g.fillStyle='#fff';g.font='800 14px Nunito, Arial';g.textAlign='center';g.textBaseline='middle';
+    g.beginPath();g.arc(pts[t][0],pts[t][1],16,0,2*Math.PI);g.fillStyle=color;g.fill();
+    g.fillStyle=WHITE;g.font='600 13px Inter, system-ui, sans-serif';g.textAlign='center';g.textBaseline='middle';
     g.fillText(v+1,pts[t][0],pts[t][1]);
   });
 }
-function refresh(){
-  drawGraph();
-  $('m2').innerHTML=table(P,colorsUpTo(k));
-}
+function refresh(){drawGraph();$('m2').innerHTML=table(P,colorsUpTo(k));}
 function next(){
   if(k>=steps.length)return;
   const s=steps[k];k++;
   const names=s.comp.map(v=>v+1).join(', ');
-  $('log').innerHTML=`<b>Paso ${k}:</b> miramos el vértice ${s.i+1}. Desde él se puede llegar a {${names}}, así que forman el <b>grupo ${k}</b>.`;
+  $('log').innerHTML=`<strong>Paso ${k}.</strong> Miramos el vértice ${s.i+1}. Desde él se llega a {${names}}, así que forman el grupo ${k}.`;
   refresh();
   if(k===steps.length)finish();
 }
@@ -278,28 +259,31 @@ function finish(){
   const order=steps.flatMap(s=>s.comp);
   const colors=colorsUpTo(steps.length);
   const Q=order.map(i=>order.map(j=>P[i][j]));
-  $('ord').innerHTML='<p class="hint"><b>Matriz reordenada:</b> cada grupo queda como un bloque de unos sobre la diagonal.</p>'
+  $('ord').innerHTML='<h3>Matriz reordenada</h3><p class="hint">Cada grupo aparece como un bloque de unos sobre la diagonal.</p>'
     +table(Q,order.map(v=>colors[v]),order.map(v=>v+1));
   $('sub').innerHTML='';
   steps.forEach((s,idx)=>drawSub(s.comp,PAL[idx%PAL.length],idx));
   const word=steps.length===1?'un grupo':steps.length+' grupos';
-  $('summary').textContent=`¡Listo! Tu grafo tiene ${word} conexos.`;
-  $('log').innerHTML+=` Las componentes son ${steps.map((s,i)=>`V${i+1} = {${s.comp.map(v=>v+1).join(', ')}}`).join(' · ')}.`;
+  $('summary').textContent=`Listo: el grafo tiene ${word} conexos.`;
+  $('log').innerHTML+=` Los grupos son ${steps.map((s,i)=>`V${i+1} = {${s.comp.map(v=>v+1).join(', ')}}`).join(' · ')}.`;
 }
-
-$('btnPrep').onclick=()=>{
+function prepare(m){
   n=parseInt($('n').value,10);
-  mode=document.querySelector('input[name=modo]:checked').value;
-  A=mode==='auto'?randMatrix(n):zeros(n);
+  mode=m;
+  $('modeAuto').setAttribute('aria-pressed',m==='auto');
+  $('modeManual').setAttribute('aria-pressed',m==='manual');
+  A=m==='auto'?randMatrix(n):zeros(n);
   steps=[];k=0;P=[];
-  $('matrixInput').innerHTML=mode==='auto'
-    ?'<p class="hint"><b>Así quedó tu grafo al azar.</b> Puedes calcular o crear otro.</p>'+table(A)
+  $('matrixInput').innerHTML=m==='auto'
+    ?'<h3>Grafo al azar</h3>'+table(A)
     :buildManual(n);
-  say('msg1',mode==='auto'?'¡Listo! Creamos un grafo al azar. Ahora calcula las componentes.':'Marca las conexiones que tenga tu grafo y luego calcula.','ok');
+  say('msg1',m==='auto'?'Listo. Ahora calcula los grupos.':'Marca las conexiones en la tabla y luego calcula.');
   $('btnCalc').disabled=false;
   $('results').classList.add('hidden');
   drawGraph();
-};
+}
+$('modeAuto').onclick=()=>prepare('auto');
+$('modeManual').onclick=()=>prepare('manual');
 $('btnCalc').onclick=()=>{
   syncA();
   A1=A.map((r,i)=>r.map((v,j)=>i===j?1:v));
@@ -309,7 +293,7 @@ $('btnCalc').onclick=()=>{
   $('m1').innerHTML=table(A1);
   $('m2').innerHTML=table(P);
   $('ord').innerHTML='';$('sub').innerHTML='';$('summary').textContent='';
-  $('log').innerHTML='Presiona <b>Siguiente paso</b> para ver cómo se forma cada grupo.';
+  $('log').innerHTML='Presiona <strong>Siguiente paso</strong> para ver cómo se forma cada grupo.';
   $('btnNext').disabled=false;$('btnAll').disabled=false;
   drawGraph();
   $('results').scrollIntoView({behavior:'smooth',block:'start'});
