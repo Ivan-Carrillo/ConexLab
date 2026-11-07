@@ -255,7 +255,7 @@ function paint(id){
 }
 function drawSub(comp,color,idx){
   const box=document.createElement('div');box.className='box';
-  box.innerHTML=`<span class="tag" style="background:${color}">Grupo ${idx+1}</span><div class="hint" style="margin:8px 0 0">Vértices ${comp.map(v=>v+1).join(', ')}</div>`;
+  box.innerHTML=`<span class="tag" style="background:${color}">Grafo ${idx+1}</span><div class="hint" style="margin:8px 0 0">Vértices ${comp.map(v=>CODES[v]).join(', ')}</div>`;
   const c=document.createElement('canvas');c.width=240;c.height=200;
   box.appendChild(c);$('sub').appendChild(box);
   const g=c.getContext('2d'),m=comp.length;
@@ -274,8 +274,8 @@ function refresh(){drawGraph();$('m2').innerHTML=table(P,colorsUpTo(k));}
 function next(){
   if(k>=steps.length)return;
   const s=steps[k];k++;
-  const names=s.comp.map(v=>v+1).join(', ');
-  $('log').insertAdjacentHTML('beforeend',`<p><strong>Paso ${k}.</strong> Miramos el vértice ${s.i+1}. Desde él se llega a {${names}}, así que forman el grupo ${k}.</p>`);
+  const names=s.comp.map(v=>CODES[v]).join(', ');
+  $('log').insertAdjacentHTML('beforeend',`<p><strong>Paso ${k}.</strong> Miramos el vértice ${CODES[s.i]}. Desde él se llega a {${names}}, así que forman el grupo ${k}.</p>`);
   refresh();
   if(k===steps.length)finish();
 }
@@ -290,7 +290,7 @@ function finish(){
   steps.forEach((s,idx)=>drawSub(s.comp,PAL[idx%PAL.length],idx));
   const word=steps.length===1?'un grupo':steps.length+' grupos';
   $('summary').textContent=`Listo: el grafo tiene ${word} conexos.`;
-  $('log').insertAdjacentHTML('beforeend',`<p><strong>Resumen:</strong> ${steps.map((s,i)=>`V${i+1} = {${s.comp.map(v=>v+1).join(', ')}}`).join(' · ')}.</p>`);
+  $('log').insertAdjacentHTML('beforeend',`<p><strong>Resumen:</strong> ${steps.map((s,i)=>`V${i+1} = {${s.comp.map(v=>CODES[v]).join(', ')}}`).join(' · ')}.</p>`);
 }
 function prepare(m){
   n=parseInt($('n').value,10);
