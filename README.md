@@ -1,56 +1,59 @@
 # ConexLab
 
-**ConexLab** es una aplicación web interactiva y didáctica diseñada para la visualización, exploración y cálculo paso a paso de **componentes conexas** y **matrices de caminos** en grafos no dirigidos. 
+Aplicación web para determinar las **componentes conexas** de un grafo no dirigido a partir de su matriz de adyacencia booleana. Muestra el cálculo paso a paso, desde la matriz de caminos hasta la separación del grafo en subgrafos.
 
-🔗 **Demostración en vivo:** [https://ivan-carrillo.github.io/ConexLab/](https://ivan-carrillo.github.io/ConexLab/)
-
----
-
-## Características Principales
-
-* **Generación Flexible de Grafos:** 
-  * Modo **Al azar** con densidad controlada.
-  * Modo **A mano** mediante simulación de matriz de adyacencia simétrica.
-  * Ajuste de vértices dinámico ($5 \le |V| \le 15$).
-* **Modelado Matemático e Interactivo:**
-  * Cálculo dinámico de la **Matriz de Adyacencia ($A_1$)** con reflexividad en la diagonal.
-  * Algoritmo de multiplicación booleana para la **Matriz de Caminos ($P$)**.
-  * Reordenamiento matricial por bloques conexos.
-* **Visualización de Grafos y Subgrafos:**
-  * Dibujo vectorial interactivo en `<canvas>` HTML5.
-  * Resaltado progresivo por colores para cada grupo conexo identificado.
-  * Generación de subgrafos independientes por cada componente encontrada.
-* **Enfoque Didáctico:**
-  * Registro explicativo paso a paso (*Log*) para reforzar el aprendizaje de algoritmos sobre grafos.
+**Demostración:** https://ivan-carrillo.github.io/ConexLab/
 
 ---
 
-## Tecnologías Utilizadas
+## Características
 
-* **HTML5:** Estructuración semántica de la interfaz y elementos Canvas.
-* **CSS3 :** Diseño moderno estilo *Clean Academic Palette*, totalmente adaptativo (*responsive*).
-* **JavaScript Vainilla:** Algoritmos de teoría de grafos, manipulaciones matriciales y renderizado 2D en tiempo real.
-* **Google Fonts:** Tipografía *Nunito* para una legibilidad clara e instructiva.
+- **Creación de grafos**
+  - *Al azar:* genera una matriz simétrica con cada arista presente con probabilidad 0,2.
+  - *A mano:* permite marcar las aristas en una tabla. Cada casilla se refleja automáticamente en su simétrica, así que la matriz siempre es válida para un grafo no dirigido.
+  - Número de vértices ajustable entre 5 y 15. Al cambiarlo, la tabla conserva las aristas ya marcadas que sigan dentro del nuevo tamaño.
+- **Identificación de estaciones:** cada vértice tiene una inicial fija (por ejemplo, CE, AB, AN). Solo se muestran las iniciales de los vértices elegidos, junto con una leyenda con el nombre de cada uno.
+- **Cálculo matemático**
+  - Matriz de adyacencia con 1 en la diagonal.
+  - Matriz de caminos mediante la suma de potencias booleanas hasta la potencia *n − 1*.
+  - Agrupación de los vértices por filas, con la matriz reordenada en bloques.
+- **Visualización**
+  - Grafo asociado dibujado en un lienzo HTML5, con cada grupo en un color distinto.
+  - Subgrafo independiente para cada componente encontrada.
+- **Registro explicativo:** cada paso del recorrido se acumula en una lista para seguir el razonamiento de principio a fin.
 
----
+## Uso
 
-## Modo de Uso
+1. **Configurar el grafo**
+   - Elige el número de vértices con el deslizador.
+   - Presiona **Al azar** para generar un grafo aleatorio, o **A mano** para marcar las aristas en la tabla.
+2. **Calcular**
+   - Presiona **Calcular componentes**. Aparecerán las matrices de adyacencia y de caminos.
+3. **Explorar el resultado**
+   - **Siguiente paso** muestra un grupo a la vez, con su explicación.
+   - **Mostrar todo** completa el recorrido de inmediato.
+   - **Empezar de nuevo** reinicia la aplicación.
 
-1. **Paso 1 · Configurar el Grafo:**
-   * Selecciona el número deseado de vértices mediante el deslizador.
-   * Elige entre generar una topología aleatoria o marcar las aristas manualmente en la matriz.
-   * Haz clic en **Crear grafo**.
-2. **Paso 2 · Iniciar Análisis:**
-   * Presiona el botón **Calcular componentes**.
-3. **Paso 3 · Explorar Resultados:**
-   * Utiliza el botón **Siguiente paso** para observar de forma secuencial la identificación de cada grupo conexo.
-   * Alternativamente, haz clic en **Mostrar todo** para desplegar de forma inmediata las matrices de adyacencia, caminos, bloques reordenados y la desintegración en subgrafos.
+## Estructura del repositorio
 
----
+```
+ConexLab/
+├── index.html   # Aplicación completa (HTML, CSS y JavaScript)
+├── README.md    # Este documento
+```
 
-## Licencia y Créditos Académicos
+## Ejecución local
 
-Este proyecto fue desarrollado como trabajo del curso de **Matemática Computacional** en la **Universidad Peruana de Ciencias Aplicadas (UPCA / UPC)**.
+No requiere instalación. Descarga el repositorio y abre `index.html` en su navegador de preferencia.
 
-* **Uso:** Estrictamente limitado a **fines académicos**, docentes y de investigación.
-* **Autor:** Iván Carrillo & Equipo de Trabajo.
+## Limitaciones
+
+- Solo trabaja con grafos no dirigidos.
+- Usa el método matricial del curso.
+- Las iniciales están fijas para 15 estaciones; cambiarlas requiere editar el código.
+
+## Créditos y licencia
+
+Proyecto desarrollado por estudiantes de la **Universidad Peruana de Ciencias Aplicadas (UPC)** como trabajo del curso **1AMA0475 Matemática Computacional**
+
+Uso restringido a **fines académicos**: estudio, enseñanza y evaluación.
