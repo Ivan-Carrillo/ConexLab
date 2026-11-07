@@ -50,6 +50,7 @@ h3{font-size:.95rem;font-weight:600;margin:20px 0 4px}
 canvas.graph{width:100%;height:auto;display:block;background:var(--white);border:1px solid var(--soft);border-radius:12px}
 .controls{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0 8px}
 .log{color:var(--sub);font-size:.98rem;min-height:2.6em;margin-top:6px}
+.log p{margin:0 0 8px}
 .log strong{color:var(--ink);font-weight:600}
 .summary{font-size:1.15rem;font-weight:600;color:var(--accent);margin:18px 0 0}
 #sub{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-top:16px}
@@ -57,6 +58,9 @@ canvas.graph{width:100%;height:auto;display:block;background:var(--white);border
 #sub canvas{width:100%;height:auto}
 .tag{display:inline-block;font-size:.85rem;font-weight:600;color:var(--white);padding:3px 10px;border-radius:999px}
 .hidden{display:none}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.9rem;color:var(--sub);margin-top:12px}
+.legend b{color:var(--ink);font-weight:600;margin-right:4px}
+#legend{margin:0 0 14px}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
@@ -78,7 +82,10 @@ canvas.graph{width:100%;height:auto;display:block;background:var(--white);border
       <button class="mode" id="modeManual" aria-pressed="false">A mano</button>
     </div>
     <p id="msg1" class="msg" role="status"></p>
-    <div id="matrixInput" class="scroll"></div>
+    <div id="builder" class="dual hidden">
+      <div id="matrixInput" class="scroll"></div>
+      <div><h3>Vista del grafo</h3><canvas id="cvPre" class="graph" width="600" height="440" aria-label="Vista previa del grafo"></canvas></div>
+    </div>
   </section>
 
   <section class="step" aria-labelledby="s2">
@@ -89,6 +96,7 @@ canvas.graph{width:100%;height:auto;display:block;background:var(--white);border
 
   <section id="results" class="step hidden" aria-labelledby="s3">
     <h2 id="s3">3. Mira cómo se agrupan</h2>
+    <div id="legend"></div>
     <div class="results dual">
       <div>
         <h3>El grafo</h3>
@@ -108,7 +116,7 @@ canvas.graph{width:100%;height:auto;display:block;background:var(--white);border
       <button class="ghost" id="btnAll">Mostrar todo</button>
       <button class="ghost" id="btnReset">Empezar de nuevo</button>
     </div>
-    <p class="log" id="log" aria-live="polite"></p>
+    <div class="log" id="log" aria-live="polite"></div>
     <div class="scroll" id="ord"></div>
     <div id="sub"></div>
     <p id="summary" class="summary"></p>
@@ -119,6 +127,9 @@ canvas.graph{width:100%;height:auto;display:block;background:var(--white);border
 const PAL=['#3f7a00','#1d2024','#2f5d8a','#8a5a00','#6b717a','#4a3f7a','#9aa0a8','#7a2e2e','#2e6b5a','#5a6b2e','#3a4a5a','#8a6f4a','#5b616a','#6e8f3a','#2a2d32'];
 const INK='#1d2024', EDGE='#b9bec6', WHITE='#ffffff', BASE='#eceef1';
 const $=id=>document.getElementById(id);
+const CODES=['CE','AB','AN','PA','AY','CA','AG','SB','LC','PU','VM','MA','SJ','AT','JC'];
+const NAMES=['Central','Abancay','Andahuaylas','Parinacochas','Ayacucho','Cabitos','Angamos','San Borja Sur','La Cultura','Pumacahua','Villa María','María Auxiliadora','San Juan','Atocongo','Jorge Chávez'];
+function legendCodes(m){return '<div class="legend">'+Array.from({length:m},(_,i)=>`<span><b>${CODES[i]}</b>${NAMES[i]}</span>`).join('')+'</div>';}
 let mode='auto', n=7, A=[], A1=[], P=[], steps=[], k=0;
 
 function zeros(m){return Array.from({length:m},()=>Array(m).fill(0));}
@@ -163,7 +174,7 @@ function colorsUpTo(t){
   return c;
 }
 function table(M,colors,labels){
-  const m=M.length,lab=labels||M.map((_,i)=>i+1);
+  const m=M.length,lab=labels||M.map((_,i)=>CODES[i]);
   let h='<table><tr><th></th>'+lab.map(x=>`<th>${x}</th>`).join('')+'</tr>';
   for(let i=0;i<m;i++){
     h+=`<tr><th>${lab[i]}</th>`;
@@ -178,15 +189,15 @@ function table(M,colors,labels){
 }
 function say(id,text){const el=$(id);el.textContent=text;}
 function buildManual(m){
-  let h='<table class="grid"><tr><th></th>'+[...Array(m)].map((_,j)=>`<th>${j+1}</th>`).join('')+'</tr>';
+  let h='<table class="grid"><tr><th></th>'+[...Array(m)].map((_,j)=>`<th>${CODES[j]}</th>`).join('')+'</tr>';
   for(let i=0;i<m;i++){
-    h+=`<tr><th>${i+1}</th>`;
+    h+=`<tr><th>${CODES[i]}</th>`;
     for(let j=0;j<m;j++){
       h+=i===j?'<td>·</td>':`<td><input class="cell" type="checkbox" aria-label="Conexión ${i+1}-${j+1}" data-i="${i}" data-j="${j}" ${A[i][j]?'checked':''}></td>`;
     }
     h+='</tr>';
   }
-  return h+'</table><p class="hint">Marca las conexiones. La casilla opuesta se marca sola.</p>';
+  return h+'</table><p class="hint">Marca las conexiones. La casilla opuesta se marca sola.</p>'+legendCodes(m);
 }
 function syncA(){
   if(mode!=='manual')return;
@@ -202,10 +213,22 @@ document.addEventListener('change',e=>{
     syncA();drawGraph();
   }
 });
-$('n').oninput=e=>$('nOut').textContent=e.target.value;
+$('n').oninput=e=>{
+  $('nOut').textContent=e.target.value;
+  const m=+e.target.value;
+  if(mode==='manual' && A.length){
+    const M=zeros(m);
+    for(let i=0;i<Math.min(m,A.length);i++)for(let j=0;j<Math.min(m,A.length);j++)M[i][j]=A[i][j];
+    A=M; n=m;
+    $('matrixInput').innerHTML=buildManual(m);
+    drawGraph();
+  }
+};
 
-function drawGraph(){
-  const c=$('cv'),g=c.getContext('2d');
+function drawGraph(){ paint('cv'); paint('cvPre'); }
+function paint(id){
+  const c=$(id); if(!c)return;
+  const g=c.getContext('2d');
   g.clearRect(0,0,c.width,c.height);
   const N=A.length,colors=colorsUpTo(k),pts=[];
   for(let i=0;i<N;i++){
@@ -225,7 +248,7 @@ function drawGraph(){
     g.lineWidth=2;g.strokeStyle=colors[i]||'#9aa0a8';g.stroke();
     g.fillStyle=colors[i]?WHITE:INK;
     g.font='600 14px Inter, system-ui, sans-serif';g.textAlign='center';g.textBaseline='middle';
-    g.fillText(i+1,pts[i][0],pts[i][1]);
+    g.fillText(CODES[i],pts[i][0],pts[i][1]);
   }
 }
 function drawSub(comp,color,idx){
@@ -242,7 +265,7 @@ function drawSub(comp,color,idx){
   comp.forEach((v,t)=>{
     g.beginPath();g.arc(pts[t][0],pts[t][1],16,0,2*Math.PI);g.fillStyle=color;g.fill();
     g.fillStyle=WHITE;g.font='600 13px Inter, system-ui, sans-serif';g.textAlign='center';g.textBaseline='middle';
-    g.fillText(v+1,pts[t][0],pts[t][1]);
+    g.fillText(CODES[v],pts[t][0],pts[t][1]);
   });
 }
 function refresh(){drawGraph();$('m2').innerHTML=table(P,colorsUpTo(k));}
@@ -250,7 +273,7 @@ function next(){
   if(k>=steps.length)return;
   const s=steps[k];k++;
   const names=s.comp.map(v=>v+1).join(', ');
-  $('log').innerHTML=`<strong>Paso ${k}.</strong> Miramos el vértice ${s.i+1}. Desde él se llega a {${names}}, así que forman el grupo ${k}.`;
+  $('log').insertAdjacentHTML('beforeend',`<p><strong>Paso ${k}.</strong> Miramos el vértice ${s.i+1}. Desde él se llega a {${names}}, así que forman el grupo ${k}.</p>`);
   refresh();
   if(k===steps.length)finish();
 }
@@ -260,12 +283,12 @@ function finish(){
   const colors=colorsUpTo(steps.length);
   const Q=order.map(i=>order.map(j=>P[i][j]));
   $('ord').innerHTML='<h3>Matriz reordenada</h3><p class="hint">Cada grupo aparece como un bloque de unos sobre la diagonal.</p>'
-    +table(Q,order.map(v=>colors[v]),order.map(v=>v+1));
+    +table(Q,order.map(v=>colors[v]),order.map(v=>CODES[v]));
   $('sub').innerHTML='';
   steps.forEach((s,idx)=>drawSub(s.comp,PAL[idx%PAL.length],idx));
   const word=steps.length===1?'un grupo':steps.length+' grupos';
   $('summary').textContent=`Listo: el grafo tiene ${word} conexos.`;
-  $('log').innerHTML+=` Los grupos son ${steps.map((s,i)=>`V${i+1} = {${s.comp.map(v=>v+1).join(', ')}}`).join(' · ')}.`;
+  $('log').insertAdjacentHTML('beforeend',`<p><strong>Resumen:</strong> ${steps.map((s,i)=>`V${i+1} = {${s.comp.map(v=>v+1).join(', ')}}`).join(' · ')}.</p>`);
 }
 function prepare(m){
   n=parseInt($('n').value,10);
@@ -274,8 +297,9 @@ function prepare(m){
   $('modeManual').setAttribute('aria-pressed',m==='manual');
   A=m==='auto'?randMatrix(n):zeros(n);
   steps=[];k=0;P=[];
+  $('builder').classList.remove('hidden');
   $('matrixInput').innerHTML=m==='auto'
-    ?'<h3>Grafo al azar</h3>'+table(A)
+    ?'<h3>Grafo al azar</h3>'+table(A)+legendCodes(n)
     :buildManual(n);
   say('msg1',m==='auto'?'Listo. Ahora calcula los grupos.':'Marca las conexiones en la tabla y luego calcula.');
   $('btnCalc').disabled=false;
@@ -292,8 +316,9 @@ $('btnCalc').onclick=()=>{
   $('results').classList.remove('hidden');
   $('m1').innerHTML=table(A1);
   $('m2').innerHTML=table(P);
+  $('legend').innerHTML=legendCodes(A.length);
   $('ord').innerHTML='';$('sub').innerHTML='';$('summary').textContent='';
-  $('log').innerHTML='Presiona <strong>Siguiente paso</strong> para ver cómo se forma cada grupo.';
+  $('log').innerHTML='<p>Presiona <strong>Siguiente paso</strong> para ver cómo se forma cada grupo.</p>';
   $('btnNext').disabled=false;$('btnAll').disabled=false;
   drawGraph();
   $('results').scrollIntoView({behavior:'smooth',block:'start'});
@@ -304,6 +329,8 @@ $('btnReset').onclick=()=>{
   $('results').classList.add('hidden');
   say('msg1','');
   $('matrixInput').innerHTML='';
+  $('builder').classList.add('hidden');
+  $('log').innerHTML='';
   $('btnCalc').disabled=true;
   A=[];steps=[];k=0;
   window.scrollTo({top:0,behavior:'smooth'});
